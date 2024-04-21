@@ -26,6 +26,10 @@
         };
     }
 
+
+
+
+
     function createForList(cln, list) {
         const newList = [];
         let variable;
@@ -44,14 +48,24 @@
             });
         };
     }
+    
+
+    function updateEntireList(cln, list) {
+        list.forEach((item, index) => {
+            document.querySelectorAll(`.${cln}${index}`).forEach(element => {
+                element.textContent = item;
+            });
+
+        })
+    }
 
     function useStateList(initialList) {
         //wrapper function for returning 2 dinimicly created functions and dealing with the lists class name
         const cln = `list${listsUsed}`;
         listsUsed++;
-        return [createForList(cln, initialList), createSetforList(cln)];
+        return [createForList(cln, initialList), createSetforList(cln), () => (updateEntireList(cln, initialList))];
     }
-
+    
 
 
 
@@ -98,7 +112,7 @@
                 <div class="div">
                     testing createForObject - {placePeople["sarah"]}</div>
                     <button onClick={() => setPeople("sarah", "wally")}>click</button>
-
+                    <button onClick={updateNames}>updateNames</button>
 
                
                 </div>
@@ -108,7 +122,8 @@
     let listsUsed = 0;
     let objsUsed = 0;
 
-    const [placeNames, setNames] = useStateList(['<div onclick="alert("you have been hacked"))></div>', 'sarah', 'joe'])
+    const names = ['<div onclick="alert("you have been hacked"))></div>', 'sarah', 'joe']
+    const [placeNames, setNames, updateNames] = useStateList(names)
 const people = {
         'sarah': 'shittins',
         'joe': 'walisons'
@@ -122,6 +137,8 @@ const people = {
     
     
     ReactDOM.render(<App />, document.getElementById('root'));
+    names[0] = "changed";
+
 </script>
 
 
