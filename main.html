@@ -56,7 +56,7 @@
 
 
 
-    function createForObject(cln, obj) {
+    function createForObj(cln, obj) {
         const newObj = [];
         let variable;
         Object.keys(obj).forEach(key => {
@@ -114,8 +114,10 @@ const people = {
         'joe': 'walisons'
     }
 
-    const placePeople = createForObject('person', people);
-    const setPeople = createSetforObj('person');
+    // const placePeople = createForObject('person', people);
+    // const setPeople = createSetforObj('person');
+
+    const [placePeople, setPeople] = useStateObj(people);
 
     
     
