@@ -27,11 +27,11 @@
     }
 
     function createForList(cln, list) {
-        let variable;
         const newList = [];
+        let variable;
         for (let i = 0; i < list.length; i++) {
             variable = list[i];
-            // variable = variable.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            // variable = variable.replace(/</g, '&lt;').replace(/>/g, '&gt;');  //make html safe
              newList.push(<span class={`${cln}${i}`}>{variable}</span>);
         }
         return newList;
@@ -46,16 +46,47 @@
     }
 
     function useStateList(initialList) {
+        //wrapper function for returning 2 dinimicly created functions and dealing with the lists class name
         const cln = `list${listsUsed}`;
         listsUsed++;
         return [createForList(cln, initialList), createSetforList(cln)];
     }
 
 
+
+
+
+    function createForObject(cln, obj) {
+        const newObj = [];
+        let variable;
+        Object.keys(obj).forEach(key => {
+            variable = obj[key];
+            // variable = variable.replace(/</g, '&lt;').replace(/>/g, '&gt;');  //make html safe
+            newObj[key] = <span class={`${cln}${key}`}>{variable}</span>;
+        });
+        return newObj;
+    }
+    
+    function createSetforObj(cln) {
+        return (key, variable) => {
+            document.querySelectorAll(`.${cln}${key}`).forEach(element => {
+                element.textContent = variable;
+            });
+        };
+    }
+
+    function useStateObj(initialObj) {
+        const cln = `obj${objsUsed}`;
+        objsUsed++;
+        return [createForObj(cln, initialObj), createSetforObj(cln)];
+    }
+
+    
+
     function App() {
         
 
-        console.log(placeNames);
+        console.log(placeNames); //display a list of html elements for each item in the list
 
         return (
             <div>
@@ -64,17 +95,33 @@
                 </div>
                 {placeNames[1]}
                 <button onClick={() => setNames(0, "shmugly")}>click me</button>
+                <div class="div">
+                    testing createForObject - {placePeople["sarah"]}</div>
+                    <button onClick={() => setPeople("sarah", "wally")}>click</button>
 
+
+               
                 </div>
         );
     }
 
     let listsUsed = 0;
+    let objsUsed = 0;
 
     const [placeNames, setNames] = useStateList(['<div onclick="alert("you have been hacked"))></div>', 'sarah', 'joe'])
+const people = {
+        'sarah': 'shittins',
+        'joe': 'walisons'
+    }
 
+    const placePeople = createForObject('person', people);
+    const setPeople = createSetforObj('person');
+
+    
+    
     ReactDOM.render(<App />, document.getElementById('root'));
 </script>
+
 
 </body>
 </html>
