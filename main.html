@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>todo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+    function create(cln, variable) {
+        return <div className={cln}>{variable}</div>;
+    }
+
+
+    function createSet(cln) {
+        return (variable) => {
+            document.querySelectorAll(`.${cln}`).forEach(element => {
+                element.textContent = variable;
+            });
+        };
+    }
+
+    function createForList(cln, list) {
+        let variable;
+        const newList = [];
+        for (let i = 0; i < list.length; i++) {
+            variable = list[i];
+            // variable = variable.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+             newList.push(<span class={`${cln}${i}`}>{variable}</span>);
+        }
+        return newList;
+    }
+    
+    function createSetforList(cln) {
+        return (index, variable) => {
+            document.querySelectorAll(`.${cln}${index}`).forEach(element => {
+                element.textContent = variable;
+            });
+        };
+    }
+
+    function useStateList(initialList) {
+        const cln = `list${listsUsed}`;
+        listsUsed++;
+        return [createForList(cln, initialList), createSetforList(cln)];
+    }
+
+
+    function App() {
+        
+
+        console.log(placeNames);
+
+        return (
+            <div>
+                <div>
+                    {placeNames[0]}
+                </div>
+                {placeNames[1]}
+                <button onClick={() => setNames(0, "shmugly")}>click me</button>
+
+                </div>
+        );
+    }
+
+    let listsUsed = 0;
+
+    const [placeNames, setNames] = useStateList(['<div onclick="alert("you have been hacked"))></div>', 'sarah', 'joe'])
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+</script>
+
+</body>
+</html>
